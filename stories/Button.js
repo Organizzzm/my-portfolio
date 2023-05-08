@@ -8,8 +8,8 @@ export const createButton = ({
   onClick,
 }) => {
   const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.innerText = label;
+  btn.type = 'button xxx';
+  btn.innerHTML = `${label} <i class="icon-xxx">`;
   btn.addEventListener('click', onClick);
 
   const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
