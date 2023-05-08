@@ -35,5 +35,7 @@ jobs:
         run: |
           npm i
           npm run build-storybook  
-      - name: Deploying the static website to gh-pages
-        run: npm run deploy-storybook
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .
