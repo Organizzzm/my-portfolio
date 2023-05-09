@@ -10,7 +10,6 @@
     "predeploy": "npm run build-storybook",
     "deploy-storybook": "gh-pages -d storybook-static",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=4cd33344d8b4",
     "icons:create": "npx @svgr/cli --out-dir ./react-icons ./icons && npx fantasticon icons -o public -c .fantasticon.js"
   },
   "keywords": [],
@@ -24,7 +23,6 @@
     "@storybook/html": "^7.0.8",
     "@storybook/html-webpack5": "^7.0.8",
     "@storybook/testing-library": "^0.0.14-next.2",
-    "chromatic": "^6.17.4",
     "gh-pages": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
