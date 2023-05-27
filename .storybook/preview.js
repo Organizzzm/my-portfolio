@@ -1,5 +1,4 @@
 /** @type { import('@storybook/html').Preview } */
-import '../public/icons.css';
 
 const preview = {
   parameters: {
