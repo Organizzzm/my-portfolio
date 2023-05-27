@@ -5,8 +5,9 @@ const config = {
   addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions"],
   // staticDirs: ['../public'],
   // staticDirs: [{ from: '../icon-dist', to: '/static' }],
+  core: {},
   framework: {
-    name: "@storybook/html-webpack5",
+    name: "@storybook/html-vite",
     options: {}
   },
   docs: {

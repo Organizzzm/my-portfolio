@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "noImplicitAny": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "pretty": true
+  },
+  "exclude": ["node_modules"],
+  "include": ["src", "stories"]
+}

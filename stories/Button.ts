@@ -1,12 +1,14 @@
 import './button.css';
 
-export const createButton = ({
-  primary = false,
-  size = 'medium',
-  backgroundColor,
-  label,
-  onClick,
-}) => {
+export interface IArgs {
+  primary: boolean;
+  size: string;
+  backgroundColor: string;
+  label: string;
+  onClick: () => void;
+}
+
+export default ({ primary = false, size = 'medium', backgroundColor, label, onClick }: IArgs) => {
   const btn = document.createElement('button');
   btn.type = 'button xxx';
   btn.innerHTML = `${label} <i class="icon-xxx"><i class="icon-xxx">`;
