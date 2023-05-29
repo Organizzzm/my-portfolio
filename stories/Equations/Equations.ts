@@ -1,4 +1,4 @@
-import Graph from '~/src/modules/graph';
+import Graph from '~/src/modules/graph.ts';
 import { storiesCanvas } from '~/stories/utils';
 import { useEffect } from '@storybook/addons';
 import makeList from './partials/selectors';
