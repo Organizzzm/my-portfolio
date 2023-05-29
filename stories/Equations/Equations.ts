@@ -1,6 +1,6 @@
-import Graph from '~/src/modules/graph';
-import { storiesCanvas } from '~/stories/utils';
 import { useEffect } from '@storybook/addons';
+import { storiesCanvas } from '~/stories/utils';
+import Graph from '~/src/modules/Graph';
 import makeList from './partials/selectors';
 import './Equations.css';
 
