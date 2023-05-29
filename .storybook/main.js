@@ -4,8 +4,8 @@ import path from 'path';
 const config = {
   stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions'],
-  // staticDirs: ['../public'],
-  staticDirs: [{ from: '../public', to: '/' }],
+  staticDirs: ['../public'],
+  // staticDirs: [{ from: '../public', to: '/' }],
   core: {},
   framework: {
     name: '@storybook/html-vite',
