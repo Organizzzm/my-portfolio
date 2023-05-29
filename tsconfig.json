@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "ESNext",
     "noImplicitAny": true,
-    "baseUrl": ".",
     "allowJs": true,
     "checkJs": true,
     "strict": true,
@@ -10,7 +9,10 @@
     "preserveConstEnums": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "pretty": true
+    "pretty": true,
+    "paths": {
+      "~/*": ["./*"]
+    }
   },
   "exclude": ["node_modules"],
   "include": ["src", "stories"]

@@ -1,0 +1,12 @@
+<link type="image/png" sizes="32x32" rel="icon" href="human-head.svg" />
+<script>
+  var observer = new MutationObserver(function (mutations) {
+    if (document.title.match(/Storybook$/)) {
+      document.title = "Dmitrii Zakharov's Resume";
+    }
+  }).observe(document.querySelector('title'), {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
+</script>
