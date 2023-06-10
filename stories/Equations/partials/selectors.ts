@@ -8,7 +8,9 @@ interface IList {
 export default (list: IList[]) => {
   let html = `<ul class="formulas-list">`;
 
-  const listHTML = list.map((item: IList) => `<li><button>${item.formula}</button></li>`).join('');
+  const listHTML = list
+    .map((item: IList) => `<li><button data-name="${item.name}">${item.formula}</button></li>`)
+    .join('');
 
   html += listHTML;
   html += '</ul>';

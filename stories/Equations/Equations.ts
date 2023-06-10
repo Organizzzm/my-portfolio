@@ -1,43 +1,39 @@
 import { useEffect } from '@storybook/addons';
 import { storiesCanvas } from '~/stories/utils';
-import Graph from '~/src/modules/Graph';
+import { Drawer } from '~/stories/Equations/model/drawer';
 import makeList from './partials/selectors';
+import { IEquationsDataKeys } from './data/equations-data';
 import './Equations.css';
 
+let drawer!: Drawer;
 const container = document.createElement('div');
 const canvas = storiesCanvas({ width: 600, height: 500 });
 const list = makeList([
   { formula: '𝑦 = 𝑥²', name: 'square_x' },
   { formula: '𝑦 = 2𝑥 + 1', name: 'two_x_plus_one' },
-  { formula: '<var>a<sup>2</sup></var>', name: '' },
-  { formula: '<var>a<sup>2</sup></var>', name: '' },
-  { formula: '<var>a<sup>2</sup></var>', name: '' },
-  { formula: '<var>a<sup>2</sup></var>', name: '' },
+  { formula: '𝑦 = 10 * sin𝑥', name: 'sin' },
+  { formula: '𝑦 = -0.5*𝑥⁵ + 3*𝑥³ + 𝑥*𝑥 - 2*𝑥 - 3', name: 'polynomial_curve' },
+  { formula: '𝑦 = 𝑒𝑥𝑝(–𝑥²)', name: 'exp' },
+  { formula: 'Multiplying a polynomial and a Gaussian', name: 'hills' },
 ]);
-
-function f(x: number) {
-  return 10 * Math.sin(x);
-}
 
 container.id = 'eq-container';
 container.appendChild(canvas);
 container.insertAdjacentHTML('beforeend', list);
 
+function eventHandler(this: HTMLElement, e: Event) {
+  if (!(e.target instanceof HTMLButtonElement)) return;
+  drawer.draw(e.target.dataset.name as IEquationsDataKeys);
+}
+
 export default (): HTMLElement => {
   useEffect(() => {
-    const xA = [] as number[];
-    const yA = [] as number[];
+    /** First drawing */
+    if (drawer) return;
+    drawer = new Drawer();
+    drawer.draw('square_x');
 
-    for (let i = 0; i <= 100; i++) {
-      xA[i] = (i - 50) * 0.08;
-      yA[i] = f(xA[i]);
-    }
-
-    const graph = new Graph('eq-canvas', -4, 4, -20, 20, 300, 260, 550, 460);
-
-    graph.drawgrid(1, 0.2, 5, 1);
-    graph.drawaxes('x', 'y');
-    graph.plot(xA, yA, '#ff0000', false, true);
+    document.querySelector('.formulas-list')?.addEventListener('click', eventHandler);
   });
 
   return container;

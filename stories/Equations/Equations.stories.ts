@@ -1,6 +1,9 @@
 import equations from './Equations';
 
-// More on how to set up stories at: https://storybook.js.org/docs/html/writing-stories/introduction
+/**
+ * GitHub: [https://github.com/Organizzzm/resume/blob/main/stories/Equations/Equations.ts](https://github.com/Organizzzm/resume/blob/main/stories/Equations/Equations.ts)
+ */
+
 export default {
   title: 'Charts/Equations',
   tags: ['autodocs'],
@@ -16,18 +19,19 @@ export default {
         format: true,
         transform: () => {
           return `
+          /** Simple graph example **/
+
           const xA = [] as number[];
           const yA = [] as number[];
       
           for (let i = 0; i <= 100; i++) {
-            xA[i] = (i - 50) * 0.08;
+            xA[i] = (i - 50) * ((xmax - xmin) / this.lineLenght); // Set points with certain step
             yA[i] = f(xA[i]); // f(x)
           }
       
-          const graph = new Graph('eq-canvas', -4, 4, -20, 20, 300, 260, 550, 460);
+          const graph = new Graph({id: 'eq-canvas', width: 600, height: 500 });
       
-          graph.drawgrid(1, 0.2, 5, 1);
-          graph.drawaxes('x', 'y');
+          graph.fillChart({ xmin: -4, xmax: 4, ymin: 0, ymax: 20, xstep: 1, ystep: 5 });
           graph.plot(xA, yA, '#ff0000', false, true);`;
         },
       },
@@ -35,5 +39,4 @@ export default {
   },
 };
 
-// More on writing stories with args: https://storybook.js.org/docs/html/writing-stories/args
-export const Primary = {};
+export const Graph = {};
