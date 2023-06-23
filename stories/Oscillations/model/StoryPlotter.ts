@@ -12,8 +12,6 @@ export default class StoryPlotter {
   path!: Path;
   couplingRod!: CouplingRod;
 
-  // oscillationPlotter!: OscillationPlotter;
-
   overallHeight = 250;
   duration = 10 * 1000; // ms
 
@@ -70,20 +68,16 @@ export default class StoryPlotter {
 
     let x = 0;
     let y = 0;
+    let currentStep = 0;
     const amplitude = graph.y_height / 2;
     const graphXStart = graph.x_padding;
     const pathXStart = pathBlockMinX + amplitude;
     const yCenter = overallHeight / 2;
     const ocsillatedBallX = pathBlockMinX + ocsillatedBallShift + amplitude * 2;
-
     const xscale = xmax / graph.x_width;
     const yscale = (ymax - ymin) / graph.y_height;
     const xStepScale = xmax / lineLenght;
-
     const chartTick = lineLenght / duration;
-    // const pathTick = pathLenght / duration;
-
-    let currentStep = 0;
 
     // Cache chart points
     for (let i = 0; i <= lineLenght; i++) {
@@ -121,13 +115,13 @@ export default class StoryPlotter {
       ball.update(x, y);
       ball.draw();
 
-      // // Draw coupling rod
+      // Draw coupling rod
       couplingRod.xMin = x;
       couplingRod.xMax = ocsillatedBallX;
       couplingRod.y = y;
       couplingRod.draw();
 
-      // // Draw path ball
+      // Draw path ball
       // - path
       path.draw(pathX, pathY, currentStep);
 
@@ -136,7 +130,7 @@ export default class StoryPlotter {
       ball.update(x, y);
       ball.draw();
 
-      // // Draw oscillated ball
+      // Draw oscillated ball
       ball.update(ocsillatedBallX, y);
       ball.draw();
     });
