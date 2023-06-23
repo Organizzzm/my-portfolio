@@ -1,13 +1,13 @@
 import { useEffect } from '@storybook/addons';
 import { storiesCanvas } from '~/stories/utils';
-import { Drawer } from '~/stories/Equations/model/drawer';
+import Plotter from '~/stories/Equations/Plotter';
 import makeList from './partials/selectors';
 import { IEquationsDataKeys } from './data/equations-data';
 import './Equations.css';
 
-let drawer!: Drawer;
+let plotter!: Plotter;
 const container = document.createElement('div');
-const canvas = storiesCanvas({ width: 600, height: 500 });
+const canvas = storiesCanvas('eq-canvas', { width: 600, height: 500 });
 const list = makeList([
   { formula: '𝑦 = 𝑥²', name: 'square_x' },
   { formula: '𝑦 = 2𝑥 + 1', name: 'two_x_plus_one' },
@@ -23,15 +23,15 @@ container.insertAdjacentHTML('beforeend', list);
 
 function eventHandler(this: HTMLElement, e: Event) {
   if (!(e.target instanceof HTMLButtonElement)) return;
-  drawer.draw(e.target.dataset.name as IEquationsDataKeys);
+  plotter.draw(e.target.dataset.name as IEquationsDataKeys);
 }
 
 export default (): HTMLElement => {
   useEffect(() => {
     /** First drawing */
-    if (drawer) return;
-    drawer = new Drawer();
-    drawer.draw('square_x');
+    if (plotter) return;
+    plotter = new Plotter('eq-canvas');
+    plotter.draw('square_x');
 
     document.querySelector('.formulas-list')?.addEventListener('click', eventHandler);
   });

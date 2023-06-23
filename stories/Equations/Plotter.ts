@@ -1,23 +1,23 @@
 import Graph from '~/src/modules/Graph';
 import Animation from '~/src/modules/Animation';
-import data, { IEquationsDataKeys } from '../data/equations-data';
+import data, { IEquationsDataKeys } from './data/equations-data';
 
 type IParams = { xmax: number; xmin: number; ymax: number; ymin: number; xstep: number; ystep: number };
 
-export class Drawer {
+export default class Plotter {
   animator: Animation;
   graph!: Graph;
   gColor = '#ff0000';
   currentParams!: IParams;
   oldParams!: IParams;
-  lineLenght = 100;
+  lineLenght = 200;
   gridDuration = 300;
   lineDuration = 500;
 
-  constructor() {
-    this.animator = new Animation('eq-canvas');
+  constructor(id: string) {
+    this.animator = new Animation(id);
     this.graph = new Graph({
-      id: 'eq-canvas',
+      id,
       width: 600,
       height: 500,
     });
@@ -31,15 +31,16 @@ export class Drawer {
     animator.resetTime();
     animator.clearStages();
 
+    // Set points with certain step
     const xA = [] as number[];
     const yA = [] as number[];
 
-    // Set points with certain step
     for (let i = 0; i <= this.lineLenght; i++) {
-      xA[i] = (i - 50) * ((xmax - xmin) / this.lineLenght);
+      xA[i] = (i - 100) * ((xmax - xmin) / this.lineLenght);
       yA[i] = data[equationName].fn(xA[i]);
     }
 
+    // Save old params and draw chart
     if (!this.oldParams) {
       this.oldParams = { ...data[equationName].params };
       graph.fillChart(this.oldParams);
@@ -49,14 +50,18 @@ export class Drawer {
 
     this.currentParams = { ...data[equationName].params };
     const frameParams = { ...this.oldParams };
-    let lineLenghtPerFrame = 0;
 
-    const xmax_diff = this.oldParams.xmax - this.currentParams.xmax;
-    const xmin_diff = this.oldParams.xmin - this.currentParams.xmin;
-    const ymax_diff = this.oldParams.ymax - this.currentParams.ymax;
-    const ymin_diff = this.oldParams.ymin - this.currentParams.ymin;
-    const ystep_diff = this.oldParams.ystep - this.currentParams.ystep;
-    const xstep_diff = this.oldParams.xstep - this.currentParams.xstep;
+    // Grid
+    const xmax_per_frame = (this.oldParams.xmax - this.currentParams.xmax) / this.gridDuration;
+    const xmin_per_frame = (this.oldParams.xmin - this.currentParams.xmin) / this.gridDuration;
+    const ymax_per_frame = (this.oldParams.ymax - this.currentParams.ymax) / this.gridDuration;
+    const ymin_per_frame = (this.oldParams.ymin - this.currentParams.ymin) / this.gridDuration;
+    const ystep_per_frame = (this.oldParams.ystep - this.currentParams.ystep) / this.gridDuration;
+    const xstep_per_frame = (this.oldParams.xstep - this.currentParams.xstep) / this.gridDuration;
+
+    // Line
+    const lineLenghtPerFrame = this.lineLenght / this.lineDuration;
+    let currentFrameLength = 0;
 
     animator
       .setStage(() => {
@@ -73,14 +78,14 @@ export class Drawer {
           return;
         }
 
-        frameParams.xmax = this.oldParams.xmax - (xmax_diff / this.gridDuration) * animator.getTime();
-        frameParams.xmin = this.oldParams.xmin - (xmin_diff / this.gridDuration) * animator.getTime();
+        frameParams.xmax = this.oldParams.xmax - xmax_per_frame * animator.getTime();
+        frameParams.xmin = this.oldParams.xmin - xmin_per_frame * animator.getTime();
 
-        frameParams.ymax = this.oldParams.ymax - (ymax_diff * animator.getTime()) / this.gridDuration;
-        frameParams.ymin = this.oldParams.ymin - (ymin_diff * animator.getTime()) / this.gridDuration;
+        frameParams.ymax = this.oldParams.ymax - ymax_per_frame * animator.getTime();
+        frameParams.ymin = this.oldParams.ymin - ymin_per_frame * animator.getTime();
 
-        frameParams.xstep = this.oldParams.xstep - (xstep_diff * animator.getTime()) / this.gridDuration;
-        frameParams.ystep = this.oldParams.ystep - (ystep_diff * animator.getTime()) / this.gridDuration;
+        frameParams.xstep = this.oldParams.xstep - xstep_per_frame * animator.getTime();
+        frameParams.ystep = this.oldParams.ystep - ystep_per_frame * animator.getTime();
 
         graph.fillChart(frameParams);
       })
@@ -93,8 +98,8 @@ export class Drawer {
           return;
         }
 
-        lineLenghtPerFrame = (100 / this.lineDuration) * animator.getTime();
-        graph.plot(xA.slice(0, lineLenghtPerFrame), yA.slice(0, lineLenghtPerFrame), gColor, false, true);
+        currentFrameLength = lineLenghtPerFrame * animator.getTime();
+        graph.plot(xA.slice(0, currentFrameLength), yA.slice(0, currentFrameLength), gColor, false, true);
       });
 
     animator.start();

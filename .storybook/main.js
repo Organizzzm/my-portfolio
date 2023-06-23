@@ -13,6 +13,7 @@ const config = {
   },
   docs: {
     autodocs: 'tag',
+    defaultName: 'Expo',
   },
   async viteFinal(config) {
     // Merge custom configuration into the default config

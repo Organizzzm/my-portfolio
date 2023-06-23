@@ -1,0 +1,11 @@
+#osci-container {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+#osci-container canvas:last-child {
+  position: absolute;
+  left: 0;
+  right: 0;
+}

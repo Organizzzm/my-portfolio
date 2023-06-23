@@ -1,8 +1,8 @@
 import './index.css';
 
-export default ({ width, height }: { width: number; height: number }): HTMLCanvasElement => {
+export default (id: string, { width, height }: { width: number; height: number }): HTMLCanvasElement => {
   const canvas = document.createElement('canvas');
-  canvas.id = 'eq-canvas';
+  canvas.id = id;
   const ctx = canvas.getContext('2d');
   const canvasW = width;
   const canvasH = height;

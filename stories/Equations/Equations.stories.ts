@@ -1,7 +1,7 @@
 import equations from './Equations';
 
 /**
- * GitHub: [https://github.com/Organizzzm/resume/blob/main/stories/Equations/Equations.ts](https://github.com/Organizzzm/resume/blob/main/stories/Equations/Equations.ts)
+ * ![GitHub](github.svg "GitHub") GitHub: [https://github.com/Organizzzm/resume/blob/main/stories/Equations/Equations.ts](https://github.com/Organizzzm/resume/blob/main/stories/Equations/Equations.ts)
  */
 
 export default {

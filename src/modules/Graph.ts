@@ -28,7 +28,7 @@ export default class Graph {
   y_height!: number;
 
   // overal padding
-  x_padding = 20;
+  x_padding = 30;
   y_padding = 20;
 
   // grid dimentions
@@ -146,6 +146,7 @@ export default class Graph {
     this.y_tick_major = this.ymajor / this.y_displ_scal;
     this.y_tick_minor = this.yminor / this.y_displ_scal;
 
+    // Change negative sign to positive ~ -1 + 1 = 1;
     this.x_min_rel = ~(xmin / this.x_displ_scal) + 1 + this.x_padding;
     this.y_min_rel = ~(ymin / this.y_displ_scal) + 1 + this.y_padding;
     this.x_max_rel = xmax / this.x_displ_scal + this.x_padding;
@@ -226,7 +227,7 @@ export default class Graph {
       xx += this.x_tick_major;
     } while (Math.round(xx) <= this.x_max);
   }
-  // // DRAW AXES: draw axes and labels
+  // DRAW AXES: draw axes and labels
   drawaxes() {
     const ctx = this.ctx;
 
@@ -253,7 +254,7 @@ export default class Graph {
     ctx.fillText(this.xlabel, this.x_max + 5, this.y_max_rel - this.th);
     ctx.fillText(this.ylabel, this.x_min_rel - this.tw, this.y_min - 20);
   }
-  // // PLOT DATA: plot data
+  // PLOT DATA
   plot(xArr: number[], yArr: number[], pColor = '#0000ff', pDots = true, pLine = true) {
     const ctx = this.ctx;
     let xpos = this.x_min_rel + xArr[0] / this.x_displ_scal;

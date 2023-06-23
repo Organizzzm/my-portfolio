@@ -1,0 +1,22 @@
+import { Meta, Canvas, Title, Subtitle } from '@storybook/blocks';
+import * as OscillationStories from './Oscillations.stories';
+
+<Meta of={OscillationStories} />
+
+<Title>Oscillations</Title>
+
+![GitHub](github.svg 'GitHub') GitHub:
+[https://github.com/Organizzzm/resume/blob/main/stories/Oscillations/Oscillations.ts](https://github.com/Organizzzm/resume/blob/main/stories/Oscillations/Oscillations.ts)
+
+<br />
+<Subtitle>sin(x * 𝜋 / 180)</Subtitle>
+<Canvas of={OscillationStories.Sin} />
+
+<Subtitle>sin(x * 𝜋 / 180) * exp(-0.002 * x)</Subtitle>
+<Canvas of={OscillationStories.damped} />
+
+<Subtitle>sin(x * 𝜋 / 180) + sin((1.5 * x * 𝜋) / 180)</Subtitle>
+<Canvas of={OscillationStories.waves} />
+
+<Subtitle>Fourier sum</Subtitle>
+<Canvas of={OscillationStories.fourierSum} />
