@@ -83,7 +83,7 @@ export default class StoryPlotter {
     const chartTick = lineLenght / duration;
     // const pathTick = pathLenght / duration;
 
-    let cachedStep = 0;
+    let currentStep = 0;
 
     // Cache chart points
     for (let i = 0; i <= lineLenght; i++) {
@@ -92,6 +92,7 @@ export default class StoryPlotter {
     }
 
     // Cache path points
+    // Draw from cached path because line not smooth if being lag.
     for (let i = 0; i <= lineLenght; i++) {
       pathX[i] = -amplitude * cosfn(i * xStepScale) + pathXStart;
       pathY[i] = -amplitude * fn(i * xStepScale) + yCenter;
@@ -111,11 +112,11 @@ export default class StoryPlotter {
 
       animator.clear();
 
-      cachedStep = Math.floor(chartTick * animator.getTime());
+      currentStep = Math.floor(chartTick * animator.getTime());
 
       // Draw graph ball
-      x = graphXStart + chartX[cachedStep] / xscale;
-      y = yCenter - chartY[cachedStep] / yscale;
+      x = graphXStart + chartX[currentStep] / xscale;
+      y = yCenter - chartY[currentStep] / yscale;
 
       ball.update(x, y);
       ball.draw();
@@ -128,10 +129,10 @@ export default class StoryPlotter {
 
       // // Draw path ball
       // - path
-      path.draw(pathX, pathY, cachedStep);
+      path.draw(pathX, pathY, currentStep);
 
       // - ball
-      x = -amplitude * cosfn(chartX[cachedStep]) + pathXStart;
+      x = -amplitude * cosfn(chartX[currentStep]) + pathXStart;
       ball.update(x, y);
       ball.draw();
 

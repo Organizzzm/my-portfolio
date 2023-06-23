@@ -12,16 +12,18 @@ export default class Path {
 
   draw(x: number[], y: number[], time: number) {
     const { ctx, lineColor } = this;
+    let i = time;
 
     ctx.beginPath();
     ctx.strokeStyle = lineColor;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    ctx.moveTo(x[0], y[0]);
+    ctx.moveTo(x[time], y[time]);
 
-    for (let i = 1; i < time; i++) {
+    while (i > 1) {
       ctx.lineTo(x[i], y[i]);
+      i--;
     }
 
     ctx.stroke();
