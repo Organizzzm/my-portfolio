@@ -20,7 +20,7 @@ export default class Path {
 
     ctx.moveTo(x[0], y[0]);
 
-    for (let i = 1; i < Math.floor(time); i++) {
+    for (let i = 1; i < time; i++) {
       ctx.lineTo(x[i], y[i]);
     }
 

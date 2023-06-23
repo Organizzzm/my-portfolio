@@ -20,7 +20,7 @@ export default class StoryPlotter {
   // Graph params
   gColor = '#ff0000';
   graphWidth = 600;
-  lineLenght = 200;
+  lineLenght = 100;
   pathLenght = 100;
 
   // path block params
@@ -40,7 +40,7 @@ export default class StoryPlotter {
   }
 
   draw(oscillationName: IOscillationsDataKeys) {
-    let { pathLenght } = this;
+    let { lineLenght } = this;
 
     const {
       graph,
@@ -51,7 +51,6 @@ export default class StoryPlotter {
       couplingRod,
       duration,
       pathBlockMinX,
-      lineLenght,
       ocsillatedBallShift,
       overallHeight,
     } = this;
@@ -59,39 +58,47 @@ export default class StoryPlotter {
     const {
       fn,
       cosfn,
-      params: { xmax },
+      params: { xmax, ymax, ymin },
     } = data[oscillationName];
 
-    // Draw main chart
-    const xA = [] as number[];
-    const yA = [] as number[];
+    lineLenght = data[oscillationName].params.pathMax;
 
-    for (let i = 0; i <= lineLenght; i++) {
-      xA[i] = i * (xmax / lineLenght);
-      yA[i] = fn(xA[i]);
-    }
-
-    graph.fillChart(data[oscillationName].params);
-    graph.plot(xA, yA, gColor, false, true);
-
-    pathLenght = data[oscillationName].params.pathMax;
+    const chartX = [] as number[];
+    const chartY = [] as number[];
+    const pathX = [] as number[];
+    const pathY = [] as number[];
 
     let x = 0;
     let y = 0;
-    const tick = graph.x_width / duration;
-    const graphMinX = graph.x_min_rel;
     const amplitude = graph.y_height / 2;
-    const pathHeight = graph.y_height;
-    const xStep = xmax / graph.x_width;
+    const graphXStart = graph.x_padding;
+    const pathXStart = pathBlockMinX + amplitude;
     const yCenter = overallHeight / 2;
-    const ocsillatedBallX = pathBlockMinX + pathHeight + ocsillatedBallShift;
-    const pathStep = pathLenght / duration;
+    const ocsillatedBallX = pathBlockMinX + ocsillatedBallShift + amplitude * 2;
+
+    const xscale = xmax / graph.x_width;
+    const yscale = (ymax - ymin) / graph.y_height;
+    const xStepScale = xmax / lineLenght;
+
+    const chartTick = lineLenght / duration;
+    // const pathTick = pathLenght / duration;
+
+    let cachedStep = 0;
+
+    // Cache chart points
+    for (let i = 0; i <= lineLenght; i++) {
+      chartX[i] = i * xStepScale;
+      chartY[i] = fn(chartX[i]);
+    }
 
     // Cache path points
-    for (let i = 0; i <= pathLenght; i++) {
-      xA[i] = -amplitude * cosfn((xmax / pathLenght) * i) + pathBlockMinX + amplitude;
-      yA[i] = -amplitude * fn((xmax / pathLenght) * i) + yCenter;
+    for (let i = 0; i <= lineLenght; i++) {
+      pathX[i] = -amplitude * cosfn(i * xStepScale) + pathXStart;
+      pathY[i] = -amplitude * fn(i * xStepScale) + yCenter;
     }
+
+    graph.fillChart(data[oscillationName].params);
+    graph.plot(chartX, chartY, gColor, false, true);
 
     // Animate
     animator.setStage(() => {
@@ -104,30 +111,31 @@ export default class StoryPlotter {
 
       animator.clear();
 
-      // Draw graph ball
-      x = tick * animator.getTime();
-      y = -amplitude * fn(xStep * x) + yCenter;
+      cachedStep = Math.floor(chartTick * animator.getTime());
 
-      ball.update(graphMinX + x, y);
+      // Draw graph ball
+      x = graphXStart + chartX[cachedStep] / xscale;
+      y = yCenter - chartY[cachedStep] / yscale;
+
+      ball.update(x, y);
       ball.draw();
 
-      // Draw coupling rod
-      couplingRod.xMin = graphMinX + x;
+      // // Draw coupling rod
+      couplingRod.xMin = x;
       couplingRod.xMax = ocsillatedBallX;
       couplingRod.y = y;
       couplingRod.draw();
 
-      // Draw path ball
-      x = -amplitude * cosfn(xStep * x) + pathBlockMinX + amplitude;
-
+      // // Draw path ball
       // - path
-      path.draw(xA, yA, pathStep * animator.getTime());
+      path.draw(pathX, pathY, cachedStep);
 
       // - ball
+      x = -amplitude * cosfn(chartX[cachedStep]) + pathXStart;
       ball.update(x, y);
       ball.draw();
 
-      // Draw oscillated ball
+      // // Draw oscillated ball
       ball.update(ocsillatedBallX, y);
       ball.draw();
     });

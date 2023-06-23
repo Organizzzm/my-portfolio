@@ -6,7 +6,7 @@ const data = {
     cosfn: (x: number) => {
       return Math.cos(x * (Math.PI / 180));
     },
-    params: { xmin: 0, xmax: 1440, ymin: -1, ymax: 1, xstep: 180, ystep: 0.5, pathMax: 150 },
+    params: { xmin: 0, xmax: 1440, ymin: -1, ymax: 1, xstep: 180, ystep: 0.5, pathMax: 300 },
   },
   damped: {
     fn: (x: number) => {
@@ -15,7 +15,7 @@ const data = {
     cosfn: (x: number) => {
       return Math.cos(x * (Math.PI / 180)) * Math.exp(-0.002 * x);
     },
-    params: { xmin: 0, xmax: 1440, ymin: -1, ymax: 1, xstep: 180, ystep: 0.5, pathMax: 150 },
+    params: { xmin: 0, xmax: 1440, ymin: -1, ymax: 1, xstep: 180, ystep: 0.5, pathMax: 200 },
   },
   waves: {
     fn: (x: number) => {
