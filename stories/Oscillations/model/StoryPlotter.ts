@@ -4,8 +4,9 @@ import Ball from '~/stories/Oscillations/model/Ball';
 import Animation from '~/src/modules/Animation';
 import Path from '~/stories/Oscillations/model/Path';
 import CouplingRod from '~/stories/Oscillations/model/CouplingRod';
+import BasePlotter from '~/src/entities/StoryPlotter';
 
-export default class StoryPlotter {
+export default class StoryPlotter implements BasePlotter {
   graph!: Graph;
   animator!: Animation;
   ball!: Ball;

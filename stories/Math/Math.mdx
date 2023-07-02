@@ -1,0 +1,20 @@
+import { Meta, Canvas, Title, Subtitle } from '@storybook/blocks';
+import * as MathStories from './Math.stories';
+
+<Meta of={MathStories} />
+
+<Title>Math</Title>
+
+![GitHub](github.svg 'GitHub') GitHub:
+[https://github.com/Organizzzm/resume/blob/main/stories/Math/Math.ts](https://github.com/Organizzzm/resume/blob/main/stories/Math/Math.ts)
+
+<br />
+<Subtitle>Derivative</Subtitle>
+<Canvas of={MathStories.Derivative} />
+
+<br />
+<Subtitle>
+  Derivatives computed by the forward (blue line) and central (green line) difference schemes. <br /> Purple is integral
+  from y = 4x
+</Subtitle>
+<Canvas of={MathStories.GradientCurve} />

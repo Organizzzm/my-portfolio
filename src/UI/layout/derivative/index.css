@@ -1,0 +1,15 @@
+#derivative-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+#derivative_2 {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#control-panel {
+  padding: 0 30px;
+}

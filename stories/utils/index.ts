@@ -1,2 +1,2 @@
-export { default as storiesCanvas } from './stories-canvas';
+export { default as storiesCanvas } from '../../src/UI/components/canvas';
 export const dumb = 'dumb';

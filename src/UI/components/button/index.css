@@ -1,0 +1,13 @@
+.button-ctrl {
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.1s ease-out;
+  font-weight: bold;
+  color: rgb(28, 85, 55);
+}
+
+.button-ctrl:hover {
+  background-color: greenyellow;
+}

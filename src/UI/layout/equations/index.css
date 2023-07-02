@@ -1,0 +1,15 @@
+#container {
+  display: flex;
+  justify-content: center;
+}
+
+#list-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 30px;
+}
+
+.button-ctrl {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
