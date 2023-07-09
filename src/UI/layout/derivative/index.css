@@ -11,5 +11,7 @@
 }
 
 #control-panel {
-  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  padding: 30px;
 }

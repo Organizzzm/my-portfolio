@@ -1,12 +1,17 @@
+export type HTMLEntity = HTMLElement & HTMLInputElement;
+
 export interface IUIComponent {
   el: HTMLElement;
-  on(event: keyof HTMLElementEventMap, callback: (this: HTMLElement, e: Event) => void): void;
-  off(event: keyof HTMLElementEventMap, callback: (this: HTMLElement, e: Event) => void): void;
+  ctrl: { [key: string]: IUIComponent };
+
+  on(eventName: keyof HTMLElementEventMap, callback: (this: HTMLEntity, e?: Event) => void): void;
+  off(eventName: keyof HTMLElementEventMap, callback: (this: HTMLEntity, e?: Event) => void): void;
   remove(): void;
 }
 
 export default abstract class UIComponent<T> implements IUIComponent {
   public el!: HTMLElement;
+  public ctrl!: { [key: string]: IUIComponent };
 
   constructor(options?: T) {
     this.el = this.create(options);
@@ -14,12 +19,12 @@ export default abstract class UIComponent<T> implements IUIComponent {
 
   protected abstract create(options?: T): HTMLElement;
 
-  on(event: keyof HTMLElementEventMap, callback: (this: HTMLElement, e: Event) => void) {
-    this.el.addEventListener(event, callback);
+  on(eventName: keyof HTMLElementEventMap, callback: (this: HTMLEntity, e?: Event) => void) {
+    this.el.addEventListener(eventName, callback);
   }
 
-  off(event: keyof HTMLElementEventMap, callback: (this: HTMLElement, e: Event) => void) {
-    this.el.removeEventListener(event, callback);
+  off(eventName: keyof HTMLElementEventMap, callback: (this: HTMLEntity, e?: Event) => void) {
+    this.el.removeEventListener(eventName, callback);
   }
 
   remove() {

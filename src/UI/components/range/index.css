@@ -1,0 +1,12 @@
+.range {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Ubuntu', sans-serif;
+  color: rgb(28, 85, 55);
+  margin-left: 40px;
+}
+
+.range-ctrl {
+  margin-right: 10px;
+}
