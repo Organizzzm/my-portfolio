@@ -1,11 +1,9 @@
 import UIComponent from '~/src/UI/base-component';
-import CanvasComponent from '~/src/UI/components/canvas';
-import ButtonComponent from '~/src/UI/components/button';
-import RangeComponent from '~/src/UI/components/range';
+import UIComponetsFactory from '~/src/UI/components/factory';
 
 import './index.css';
 
-export interface IDerivativeLayoutOptions {
+export interface ITangentLayoutOptions {
   id: string;
   width: number;
   height: number;
@@ -14,14 +12,14 @@ export interface IDerivativeLayoutOptions {
   numPoints: number;
 }
 
-export default class DerivativeLayout extends UIComponent<IDerivativeLayoutOptions> {
-  create({ id, width, height, startPos, range, numPoints }: IDerivativeLayoutOptions): HTMLElement {
+export default class TangentLayout extends UIComponent<ITangentLayoutOptions> {
+  create({ id, width, height, startPos, range, numPoints }: ITangentLayoutOptions): HTMLElement {
     const container = document.createElement('div');
     const controlPanel = document.createElement('div');
-    const canvas = new CanvasComponent({ id, width, height });
-    const canvas2 = new CanvasComponent({ id: id + '_2', width, height });
-    const button = new ButtonComponent({ text: 'Generate new points' });
-    const startRnage = new RangeComponent({
+    const canvas = UIComponetsFactory.create('canvas', { id, width, height });
+    const canvas2 = UIComponetsFactory.create('canvas', { id: id + '_2', width, height });
+    const button = UIComponetsFactory.create('button', { text: 'Generate new points' });
+    const startRnage = UIComponetsFactory.create('range', {
       label: 'Position',
       min: '0',
       max: numPoints.toString(),
@@ -30,7 +28,7 @@ export default class DerivativeLayout extends UIComponent<IDerivativeLayoutOptio
       name: 'position',
     });
 
-    const lenghtRange = new RangeComponent({
+    const lenghtRange = UIComponetsFactory.create('range', {
       label: 'Range',
       min: '0',
       max: numPoints.toString(),
@@ -39,7 +37,7 @@ export default class DerivativeLayout extends UIComponent<IDerivativeLayoutOptio
       name: 'range',
     });
 
-    container.id = 'derivative-container';
+    container.id = 'tangent-container';
     controlPanel.id = 'control-panel';
     controlPanel.appendChild(button.el);
     controlPanel.appendChild(startRnage.el);

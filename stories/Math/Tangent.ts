@@ -1,9 +1,9 @@
 import { useEffect } from '@storybook/addons';
 import StoryPlotter from './model/StoryPlotter';
-import UILayoutsFactory from '~/src/UI/factory';
+import UILayoutsFactory from '~/src/UI/layout/factory';
 
 export default (id: string): HTMLElement => {
-  const layout = UILayoutsFactory.create('derivative', {
+  const layout = UILayoutsFactory.create('tangent', {
     id,
     width: 900,
     height: 400,

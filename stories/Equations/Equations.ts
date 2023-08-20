@@ -1,6 +1,6 @@
 import { useEffect } from '@storybook/addons';
 import Plotter from '~/stories/Equations/Plotter';
-import UILayoutsFactory from '~/src/UI/factory';
+import UILayoutsFactory from '~/src/UI/layout/factory';
 import { IEquationsDataKeys } from './data/equations-data';
 
 let plotter!: Plotter;

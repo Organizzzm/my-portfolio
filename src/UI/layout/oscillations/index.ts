@@ -1,5 +1,5 @@
 import UIComponent from '~/src/UI/base-component';
-import CanvasComponent from '~/src/UI/components/canvas';
+import UIComponetsFactory from '~/src/UI/components/factory';
 
 import './index.css';
 
@@ -11,8 +11,16 @@ export interface IOscillationsLayoutOptions {
 export default class OscillationsLayout extends UIComponent<IOscillationsLayoutOptions> {
   create({ id, canvasData }: IOscillationsLayoutOptions): HTMLElement {
     const container = document.createElement('div');
-    const canvas = new CanvasComponent({ id, width: canvasData[0].width, height: canvasData[0].height });
-    const canvas2 = new CanvasComponent({ id: id + '_2', width: canvasData[1].width, height: canvasData[1].height });
+    const canvas = UIComponetsFactory.create('canvas', {
+      id,
+      width: canvasData[0].width,
+      height: canvasData[0].height,
+    });
+    const canvas2 = UIComponetsFactory.create('canvas', {
+      id: id + '_2',
+      width: canvasData[1].width,
+      height: canvasData[1].height,
+    });
 
     container.id = 'osci-container';
     container.appendChild(canvas.el);

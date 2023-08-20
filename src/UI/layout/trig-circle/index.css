@@ -1,0 +1,9 @@
+#trig-circle-container {
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+}
+
+#trig-circle-container canvas:last-child {
+  position: absolute;
+}

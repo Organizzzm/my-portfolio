@@ -1,10 +1,10 @@
-#derivative-container {
+#tangent-container {
   max-width: 900px;
   margin: 0 auto;
   position: relative;
 }
 
-#derivative_2 {
+#tangent_2 {
   position: absolute;
   left: 0;
   top: 0;

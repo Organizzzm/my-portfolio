@@ -1,9 +1,9 @@
-import derivative from './Derivative';
+import tangent from './Tangent';
 
 export default {
   title: 'Charts/Math',
 };
 
-export const Derivative = {
-  render: () => derivative('derivative'),
+export const Tangent = {
+  render: () => tangent('tangent'),
 };
