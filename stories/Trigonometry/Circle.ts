@@ -3,18 +3,20 @@ import StoryPlotter from './model/StoryPlotter';
 import UILayoutsFactory from '~/src/UI/layout/factory';
 
 const id = 'trigcircle';
+const WIDTH = 700;
+const HEIGHT = 500;
 
 export default (): HTMLElement => {
   const layout = UILayoutsFactory.create(id, {
     id,
-    width: 700,
-    height: 500,
+    width: WIDTH,
+    height: HEIGHT,
   });
 
   let plotter!: StoryPlotter;
 
   useEffect(() => {
-    plotter = new StoryPlotter(id, 700, 500);
+    plotter = new StoryPlotter(id, WIDTH, HEIGHT);
     plotter.draw();
 
     layout.el.addEventListener('mousemove', update);
@@ -27,7 +29,6 @@ export default (): HTMLElement => {
 
   function update(e: MouseEvent) {
     plotter.interaction.update(e.offsetX, e.offsetY);
-    plotter.interaction.plot();
   }
 
   return layout.el;

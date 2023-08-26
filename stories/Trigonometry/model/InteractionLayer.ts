@@ -1,15 +1,37 @@
+import { cosByRadians, getQuadrant, sinByRadians, tgByRadians } from '~/src/utils/math';
 import Painter from '~/stories/Trigonometry/model/Painter';
 
 export default class Interaction {
-  ctx: CanvasRenderingContext2D;
-  painter: Painter;
+  private ctx: CanvasRenderingContext2D;
+  private painter: Painter;
 
-  top: number;
-  left: number;
-  r: number;
+  private top: number;
+  private left: number;
+  private r: number;
 
-  x: number;
-  y: number;
+  private x: number;
+  private y: number;
+
+  private minTextWidth = 20;
+  private colors = {
+    angle: '#E06BFD',
+    radius: '#C1C1C1',
+    sin: '#36E275',
+    cos: '#4954F8',
+    tg: '#FFBF00',
+    ctg: '#F41B1B',
+    sec: '#FE85B2',
+    csc: '#80CCFF',
+  } as const;
+
+  private quadrant!: number;
+  private centerOfTangentX!: number;
+  private centerOfTangentY!: number;
+  private tgTextPosX!: number;
+  private secTextPosX!: number;
+  private scsTextPosY!: number;
+  private isTgQuadrant!: boolean;
+  private isCtgQuadrant!: boolean;
 
   constructor(id: string, radius: number, left: number, top: number) {
     const canvas = document.getElementById(id) as HTMLCanvasElement;
@@ -25,162 +47,142 @@ export default class Interaction {
     this.y = 0;
   }
 
-  get radianDegrees() {
+  private get radianDegrees() {
     return Math.atan2(this.y, this.x);
   }
 
-  get tangentPosition() {
+  private get tangentPos() {
     return {
       x: this.r * Math.cos(this.radianDegrees),
       y: this.r * Math.sin(this.radianDegrees),
     };
   }
 
-  get tg() {
+  private get secX() {
     return this.r / Math.cos(this.radianDegrees);
   }
 
-  get ctg() {
+  private get cscY() {
     return this.r / Math.sin(this.radianDegrees);
   }
 
-  get degrees() {
+  private get degrees() {
     let angleInDegrees = (-this.radianDegrees * 180) / Math.PI;
 
     if (angleInDegrees < 0) {
       angleInDegrees += 360;
     }
 
+    /** 0 degress show as 360 */
+    if (Math.round(angleInDegrees) === 0) {
+      angleInDegrees = 360;
+    }
+
     return angleInDegrees;
   }
 
-  plot() {
-    const { ctx, left, top, tangentPosition, radianDegrees, degrees, painter } = this;
+  plot(): void {
+    const { ctx, left, top, tangentPos, radianDegrees, degrees, painter, minTextWidth, secX, cscY, colors } = this;
+    this.quadrant = getQuadrant(radianDegrees);
+    this.centerOfTangentX = tangentPos.x / 2;
+    this.centerOfTangentY = tangentPos.y / 2;
+    this.secTextPosX = secX / 2;
+    this.scsTextPosY = (cscY - tangentPos.y) / 2 + tangentPos.y;
+    this.tgTextPosX = (secX - tangentPos.x) / 2 + tangentPos.x;
+    this.isTgQuadrant = this.quadrant == 2 || this.quadrant === 3;
+    this.isCtgQuadrant = this.quadrant < 3;
 
     ctx.clearRect(0, 0, left * 2, top * 2);
 
     ctx.save();
     ctx.translate(left, top);
 
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font = 'normal 14px Helvetica, Arial, sans-serif';
+    painter.defineStyles({
+      textAlign: 'center',
+      textBaseline: 'middle',
+      font: 'normal 14px Helvetica, Arial, sans-serif',
+    });
 
     // Draw radius
-    painter.drawLine({
-      x0: 0,
-      y0: 0,
-      x1: tangentPosition.x,
-      y1: tangentPosition.y,
-      color: '#C1C1C1',
-    });
+    painter.drawLine({ x0: 0, y0: 0, x1: tangentPos.x, y1: tangentPos.y, color: colors.radius });
 
     // Draw cos
-    painter.drawLine({
-      x0: 0,
-      y0: 0,
-      x1: tangentPosition.x,
-      y1: 0,
-      color: '#4954F8',
-    });
-
-    ctx.fillStyle = '#4954F8';
-    ctx.fillText('cos', tangentPosition.x / 2, -10);
+    painter.drawLine({ x0: 0, y0: 0, x1: tangentPos.x, y1: 0, color: colors.cos });
+    painter.drawText({ text: 'Cos', x: this.centerOfTangentX, y: -10, options: { fillStyle: colors.cos } });
 
     // Draw sin
-    painter.drawLine({
-      x0: tangentPosition.x,
-      y0: 0,
-      x1: tangentPosition.x,
-      y1: tangentPosition.y,
-      color: '#36E275',
-    });
-
-    ctx.fillStyle = '#36E275';
-    ctx.fillText('sin', tangentPosition.x - ctx.measureText('sin').width + 3, tangentPosition.y / 2);
-
-    // Draw angle
-    painter.drawAngle({
-      x0: 0,
-      y0: 0,
-      color: '#E06BFD',
-      degrees,
-      radianDegrees,
+    painter.drawLine({ x0: tangentPos.x, y0: 0, x1: tangentPos.x, y1: tangentPos.y, color: colors.sin });
+    painter.drawText({
+      text: 'Sin',
+      x: tangentPos.x - minTextWidth,
+      y: this.centerOfTangentY,
+      options: { fillStyle: colors.sin },
     });
 
     // Draw tg
-    ctx.strokeStyle = '#FFBF00';
-    ctx.fillStyle = '#FFBF00';
-
-    ctx.beginPath();
-    ctx.moveTo(tangentPosition.x, tangentPosition.y);
-    ctx.lineTo(this.tg, 0);
-    ctx.stroke();
-
-    if (radianDegrees < -1.5 || radianDegrees > 1.5) {
-      ctx.fillText(
-        'tg',
-        (this.tg - tangentPosition.x) / 2 + tangentPosition.x - ctx.measureText('tg').width - 10,
-        tangentPosition.y / 2
-      );
-    } else {
-      ctx.fillText(
-        'tg',
-        (this.tg - tangentPosition.x) / 2 + tangentPosition.x + ctx.measureText('tg').width + 10,
-        tangentPosition.y / 2
-      );
-    }
+    painter.drawLine({ x0: tangentPos.x, y0: tangentPos.y, x1: secX, y1: 0, color: colors.tg });
+    painter.drawText({
+      text: 'Tg',
+      x: this.isTgQuadrant ? this.tgTextPosX - minTextWidth : this.tgTextPosX + minTextWidth,
+      y: this.centerOfTangentY,
+      options: { fillStyle: colors.tg },
+    });
 
     // Draw ctg
-    ctx.strokeStyle = '#F41B1B';
-    ctx.fillStyle = '#F41B1B';
-
-    ctx.beginPath();
-    ctx.moveTo(tangentPosition.x, tangentPosition.y);
-    ctx.lineTo(0, this.ctg);
-    ctx.stroke();
-
-    if (radianDegrees < 0 || radianDegrees > 3) {
-      ctx.fillText(
-        'ctg',
-        tangentPosition.x / 2,
-        (this.ctg - tangentPosition.y) / 2 + tangentPosition.y - ctx.measureText('ctg').width - 5
-      );
-    } else {
-      ctx.fillText(
-        'ctg',
-        tangentPosition.x / 2,
-        (this.ctg - tangentPosition.y) / 2 + tangentPosition.y + ctx.measureText('ctg').width + 5
-      );
-    }
+    painter.drawLine({ x0: tangentPos.x, y0: tangentPos.y, x1: 0, y1: cscY, color: colors.ctg });
+    painter.drawText({
+      text: 'Ctg',
+      x: this.centerOfTangentX,
+      y: this.isCtgQuadrant ? this.scsTextPosY - minTextWidth : this.scsTextPosY + minTextWidth,
+      options: { fillStyle: colors.ctg },
+    });
 
     // Draw sec
-    ctx.strokeStyle = '#FE85B2';
-    ctx.fillStyle = '#FE85B2';
-
-    ctx.beginPath();
-    ctx.moveTo(tangentPosition.x, 0);
-    ctx.lineTo(this.tg, 0);
-    ctx.stroke();
-
-    ctx.fillText('sec', (this.tg - tangentPosition.x) / 2 + tangentPosition.x, 10);
+    painter.drawLine({ x0: tangentPos.x, y0: 0, x1: secX, y1: 0, color: colors.sec });
+    painter.drawText({ text: 'Sec', x: this.secTextPosX, y: 10, options: { fillStyle: colors.sec } });
 
     // Draw csc
-    ctx.strokeStyle = '#80CCFF';
-    ctx.fillStyle = '#80CCFF';
+    painter.drawLine({ x0: 0, y0: 0, x1: 0, y1: cscY, color: colors.csc });
+    painter.drawText({ text: 'Csc', x: -minTextWidth, y: cscY / 2, options: { fillStyle: colors.csc } });
 
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, this.ctg);
-    ctx.stroke();
+    // Draw angle
+    painter.drawAngle({ x0: 0, y0: 0, color: colors.angle, degrees, radianDegrees });
 
-    ctx.fillText('csc', -ctx.measureText('csc').width, this.ctg / 2);
+    // Draw legend
+    painter.defineStyles({
+      textAlign: 'right',
+      textBaseline: 'middle',
+      font: 'normal 18px Helvetica, Arial, sans-serif',
+    });
+
+    painter.drawText({
+      text: `Sin(${degrees.toFixed()}°) = ${-sinByRadians(radianDegrees)}`,
+      x: left,
+      y: -top + 20,
+      options: { fillStyle: colors.sin },
+    });
+
+    painter.drawText({
+      text: `Cos(${degrees.toFixed()}°) = ${cosByRadians(radianDegrees)}`,
+      x: left,
+      y: -top + 50,
+      options: { fillStyle: colors.cos },
+    });
+
+    painter.drawText({
+      text: `Tg(${degrees.toFixed()}°) = ${-tgByRadians(radianDegrees)}`,
+      x: left,
+      y: -top + 80,
+      options: { fillStyle: colors.tg },
+    });
 
     ctx.restore();
   }
 
-  update(x: number, y: number) {
+  update(x: number, y: number): void {
     this.x = x - this.left;
     this.y = y - this.top;
+
+    this.plot();
   }
 }

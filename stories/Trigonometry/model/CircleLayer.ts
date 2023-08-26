@@ -30,15 +30,11 @@ export default class Circle {
     ctx.save();
     ctx.strokeStyle = '#E06BFD';
     ctx.lineWidth = 2;
-
-    ctx.beginPath();
     ctx.moveTo(0, r);
     ctx.lineTo(0, -r);
     ctx.moveTo(r, 0);
     ctx.lineTo(-r, 0);
-    ctx.closePath();
     ctx.stroke();
-
     ctx.restore();
 
     // Draw indices.
@@ -72,7 +68,7 @@ export default class Circle {
       const theta = -n * indiceStepSize;
       const x = r * 1.08 * Math.cos(theta);
       const y = r * 1.08 * Math.sin(theta);
-      ctx.fillText((n * 15).toString() + '°', x, y + 2);
+      ctx.fillText((n * 15).toString() + '°', x, y);
     }
 
     ctx.restore();
